@@ -1,4 +1,4 @@
-# Module 4 Project - REST API for Blog Posts
+# Module 4 Project - REST API
 This project offers a REST API to handle requests for blog posts.The REST API offered here provides all the essential features needed for a blog post, such as creating, reading, updating, and deleting posts and post categories. The database table structure and API documentation provided make it simple to integrate the API with a front-end web application. The following documentation describes how to get started, how to use the API, and the structure of the database tables. 
 
 ## Getting started
@@ -37,27 +37,32 @@ This will start a local development server at http://localhost:8889. You can use
  * [GET] /api-docs
 ###### You can access the API documentation for Swagger PHP library at http://localhost:8999/api-docs. The documentation contains information about the endpoints that are available, the parameters you can use, and the responses you can expect.
 
-### Database Table Structure
-The tables in the database contain the following fields:
+## Database Tables:
 
-#### Posts
-* ***id:*** Unique post identifier.
-* ***title:*** The title of the post.
-* ***slug:*** The slug for the post URL.
-* ***content:*** The content of the post.
-* ***thumbnail:*** The URL of the thumbnail image for the post.
-* ***author:*** The author of the post.
-* ***posted_at:*** The date and time when the post was posted.
+###### Posts
+###### Categories
+###### Posts Categories
 
-#### Categories
-* ***id:*** Unique category identifier.
-* ***name:*** The name of the category.
-* ***description:*** The description of the category.
+#### Fields in Posts Table:
 
-#### Posts Categories
-* ***post_id:*** Foreign key post identifier.
-* ***category_id:*** Foreign key category identifier.
+* id (unique post identifier)
+* title (title of the post)
+* slug (slug for the post URL)
+* content (content of the post)
+* thumbnail (URL of the thumbnail image for the post)
+* author (author of the post)
+* posted_at (date and time when the post was posted)
 
+#### Fields in Categories Table:
+
+* id (unique category identifier)
+* name (name of the category)
+* description (description of the category)
+
+#### Fields in Posts Categories Table:
+
+* post_id (foreign key post identifier)
+* category_id (foreign key category identifier)
 
 
 
