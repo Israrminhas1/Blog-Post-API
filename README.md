@@ -16,7 +16,7 @@ php -S localhost:8889 -t public
 ```
 This will start a local development server at http://localhost:8889. You can use any REST API client, such as Postman or Insomnia, to interact with the API.
 
-### The available route are:
+### Project Routes:
 
 #### Posts
 * [POST] /v1/posts/create: ***Creates a new post.***
@@ -33,7 +33,9 @@ This will start a local development server at http://localhost:8889. You can use
 * [PUT] /v1/categories/update/{id}: ***Updates category.***
 * [DELETE] /v1/categories/delete/{id}: ***Deletes category.***
 
-### You can access the API documentation for Swagger PHP library at http://localhost:8999/api-docs. The documentation contains information about the endpoints that are available, the parameters you can use, and the responses you can expect.
+#### API Documentation
+ * [GET] /api-docs
+###### You can access the API documentation for Swagger PHP library at http://localhost:8999/api-docs. The documentation contains information about the endpoints that are available, the parameters you can use, and the responses you can expect.
 
 ### Database Table Structure
 The tables in the database contain the following fields:
