@@ -33,13 +33,13 @@ This will start a local development server at http://localhost:8889. You can use
 * [PUT] /v1/categories/update/{id}: ***Updates an existing category.***
 * [DELETE] /v1/categories/delete/{id}: ***Deletes an existing category.***
 
-### You can access the API documentation for Swagger PHP library at http://localhost:8999/api-docs/. The documentation contains information about the endpoints that are available, the parameters you can use, and the responses you can expect.
+### You can access the API documentation for Swagger PHP library at http://localhost:8999/api-docs. The documentation contains information about the endpoints that are available, the parameters you can use, and the responses you can expect.
 
 ### Database Table Structure
 The tables in the database contain the following fields:
 
 #### Posts
-* ***id:*** The unique identifier for each post.
+* ***id:*** Unique post identifier.
 * ***title:*** The title of the post.
 * ***slug:*** The slug for the post URL.
 * ***content:*** The content of the post.
@@ -48,13 +48,13 @@ The tables in the database contain the following fields:
 * ***posted_at:*** The date and time when the post was posted.
 
 #### Categories
-* ***id:*** The unique identifier for each category.
+* ***id:*** Unique category identifier.
 * ***name:*** The name of the category.
 * ***description:*** The description of the category.
 
 #### Posts Categories
-* ***post_id:*** The unique identifier for the post.
-* ***category_id:*** The unique identifier for the category.
+* ***post_id:*** Foreign key post identifier.
+* ***category_id:*** Foreign key category identifier.
 
 
 
