@@ -47,11 +47,11 @@ This will start a local development server at http://localhost:8889. You can use
 
 * id (unique post identifier)
 * title (title of the post)
-* slug (slug for the post URL)
+* slug (slug for the post)
 * content (content of the post)
-* thumbnail (URL of the thumbnail image for the post)
+* thumbnail (thumbnail for the post)
 * author (author of the post)
-* posted_at (date and time when the post was posted)
+* posted_at (datetime when the post was created)
 
 #### Fields in Categories Table:
 
