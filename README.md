@@ -21,17 +21,17 @@ This will start a local development server at http://localhost:8889. You can use
 #### Posts
 * [POST] /v1/posts/create: ***Creates a new post.***
 * [GET] /v1/posts: ***Returns a list of all posts.***
-* [GET] /v1/posts/{id}: ***Returns a specific post by its id.***
-* [GET] /v1/posts/{id}: ***Returns a specific post by its slug.***
-* [PUT] /v1/posts/update/{id}: ***Updates an existing post.***
-* [DELETE] /v1/posts/delete/{id}: ***Deletes an existing post.***
+* [GET] /v1/posts/{id}: ***Returns a post by ID.***
+* [GET] /v1/posts/{id}: ***Returns  post by slug.***
+* [PUT] /v1/posts/update/{id}: ***Updates post.***
+* [DELETE] /v1/posts/delete/{id}: ***Deletes post.***
 
 #### Categories
 * [POST] /v1/categories/create: ***Creates a new category.***
 * [GET] /v1/categories: ***Returns a list of all categories.***
-* [GET] /v1/categories/{id}: ***Returns a specific category by its ID.***
-* [PUT] /v1/categories/update/{id}: ***Updates an existing category.***
-* [DELETE] /v1/categories/delete/{id}: ***Deletes an existing category.***
+* [GET] /v1/categories/{id}: ***Returns a  category by ID.***
+* [PUT] /v1/categories/update/{id}: ***Updates category.***
+* [DELETE] /v1/categories/delete/{id}: ***Deletes category.***
 
 ### You can access the API documentation for Swagger PHP library at http://localhost:8999/api-docs. The documentation contains information about the endpoints that are available, the parameters you can use, and the responses you can expect.
 
