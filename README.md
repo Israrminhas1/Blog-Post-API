@@ -22,7 +22,7 @@ This will start a local development server at http://localhost:8889. You can use
 * [POST] /v1/posts/create: ***Creates a new post.***
 * [GET] /v1/posts: ***Returns a list of all posts.***
 * [GET] /v1/posts/{id}: ***Returns a post by ID.***
-* [GET] /v1/posts/{id}: ***Returns  post by slug.***
+* [GET] /v1/posts/{slug}: ***Returns  post by slug.***
 * [PUT] /v1/posts/update/{id}: ***Updates post.***
 * [DELETE] /v1/posts/delete/{id}: ***Deletes post.***
 
