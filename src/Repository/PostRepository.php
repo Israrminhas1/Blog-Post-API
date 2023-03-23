@@ -7,11 +7,12 @@ use ProjectApi\Entity\Post;
 interface PostRepository
 {
     public function store(Post $post): void;
-    /**
-     * @return Post[]
-     */
-    public function read(mixed $args): array;
-    public function readBySlug(mixed $args): array;
+
+    // /**
+    //  * @return Post[]
+    //  */
+    public function read(mixed $args): Post;
+    public function readBySlug(mixed $args): Post;
     /**
      * @return Post[]
      */

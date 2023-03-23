@@ -1,13 +1,50 @@
 # Module 5 Project - REST API
 This project offers a REST API to handle requests for blog posts.The REST API offered here provides all the essential features needed for a blog post, such as creating, reading, updating, and deleting posts and post categories. The database table structure and API documentation provided make it simple to integrate the API with a front-end web application. The following documentation describes how to get started, how to use the API, and the structure of the database tables. 
 
-## Getting started
-To use this REST API, make sure you have PHP version 7.3 or higher, a supported database management system (e.g., MySQL), and Composer dependency manager installed. To get started:
-- Clone repository: `git clone git@gitlab.com:israrminhas99/module-4-api-project.git`
-- Create a new MySQL database and import the db.sql file to create the required tables: `php database/create-blog.php`
-- Install the composer dependencies: `composer install`
-- Configure the environment: `cp .env.example .env`
-- Configure the settings to match your database configuration to `.env` file
+## Design Patterns
+
+The PHP design patterns used in this project are:
+
+#### Dependency Injection (DI) pattern:
+This pattern is used extensively throughout the code, where dependencies are injected into classes via constructor injection or setter injection.
+#### Repository pattern:
+This pattern is used to encapsulate the data access layer and provide a way for the application to interact with the database. The CategoryRepositoryFromDoctrine and PostRepositoryFromDoctrine classes implement this pattern.
+#### MVC pattern:
+This pattern  separates an application's logic into three interconnected components: Model, View, and Controller.
+The Model represents the data and business logic, the View is responsible for presenting data to the user, and the Controller handles user input and manages the communication between the Model and the View.
+## Installation
+This app can run using the typical XAMPP configuration; ensure  you have PHP version 7.3 or higher.
+1. Ensure you have XAMPP and Composer installed.
+2. Create the database `Blog`.
+3. Install the PHP dependencies.  
+   ````
+   composer install
+   ````
+4. Create the tables. 
+   ```
+   php vendor/bin/doctrine orm:schema-tool:create 
+   ````
+5. Run the local web server.
+   ```
+   php -S localhost:8889 -t public/
+
+## Quality Tools
+
+- Run the unit tests with PHPUnit
+  ```
+  php vendor/bin/phpunit test/ --colors
+  ```
+- Run the static analysis with PHPStan
+  ```
+  php vendor/bin/phpstan
+  ```
+- Check the code style with PHPCodeSniffer
+  ```
+  php vendor/bin/phpcs vendor/bin/phpcs src/ --standard=psr12
+  ```
+- Fix the code style with PHPCodeSniffer
+  ```
+  php vendor/bin/phpcbf vendor/bin/phpcs src/ --standard=psr12
 
 ## Usage
 
@@ -16,6 +53,7 @@ php -S localhost:8889 -t public
 ```
 This will start a local development server at http://localhost:8889. You can use any REST API client, such as Postman or Insomnia, to interact with the API.
 
+Images are saved in Uploads folder in public.
 ### Project Routes:
 
 #### Posts
