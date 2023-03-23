@@ -19,7 +19,7 @@ The Model represents the data and business logic, the View is responsible for pr
 ## Installation
 This app can run using the typical XAMPP configuration; ensure  you have PHP version 7.3 or higher.
 1. Ensure you have XAMPP and Composer installed.
-2. Create the database `Blog`.
+2. Create the database `blog`.
 3. Install the PHP dependencies.  
    ````
    composer install
@@ -83,7 +83,7 @@ Images are saved in Uploads folder in public.
 
 ###### Posts
 ###### Categories
-###### Posts Categories
+###### Post_Category
 
 #### Fields in Posts Table:
 
@@ -101,7 +101,7 @@ Images are saved in Uploads folder in public.
 * name (name of the category)
 * description (description of the category)
 
-#### Fields in Posts Categories Table:
+#### Fields in Post_Category Table:
 
 * post_id (foreign key post identifier)
 * category_id (foreign key category identifier)
