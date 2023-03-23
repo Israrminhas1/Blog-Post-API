@@ -6,13 +6,13 @@ use DI\Container;
 use Laminas\Diactoros\Response\JsonResponse;
 use ProjectApi\Entity\Category;
 use ProjectApi\Repository\CategoryRepository;
+use ProjectApi\Validator\CategoryValidator;
 use Ramsey\Uuid\Uuid;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
 
 class CategoryController
 {
-    
     private CategoryRepository $categoryRepository;
 
     public function __construct(Container $container)
@@ -47,21 +47,9 @@ class CategoryController
      */
     public function create(Request $request, Response $response, mixed $args): JsonResponse
     {
+        $inputs = json_decode($request->getBody()->getContents(), true);
+            CategoryValidator::validate($inputs);
         try {
-            $inputs = json_decode($request->getBody()->getContents(), true);
-
-            $categories = $this->categoryRepository->listAllCategories();
-
-            foreach ($categories as $category) {
-                if ($category['name'] === $inputs['name']) {
-                    throw new \Exception('Category with similar name already exists.', 400);
-                }
-            }
-
-            if (empty($inputs['name']) || empty($inputs['description'])) {
-                throw new \Exception('Missing required fields.');
-            }
-
             $category = new Category(
                 Uuid::uuid4(),
                 $inputs['name'],
@@ -96,7 +84,19 @@ class CategoryController
     {
         $allCategories = $this->categoryRepository->listAllCategories();
 
-        return new JsonResponse($allCategories);
+        return $this->toJson($allCategories);
+    }
+    private function toJson(array $categories): JsonResponse
+    {
+        $categoryResponse = [];
+        foreach ($categories as $category) {
+            $categoryResponse[] = [
+                'id' => $category->id(),
+                'name' => $category->name(),
+                'description' => $category->description(),
+            ];
+        }
+        return new JsonResponse($categoryResponse);
     }
     /**
      * @OA\Get(
@@ -126,13 +126,9 @@ class CategoryController
     {
         $category = $this->categoryRepository->read($args);
 
-        if (!$category) {
-            return new JsonResponse(['error' => 'Category not found.'], 404);
-        }
-
-        return new JsonResponse($category);
+        return new JsonResponse($category->toArray());
     }
-    
+
      /**
      * @OA\Put(
      *     path="/v1/categories/update/{id}",
@@ -177,21 +173,20 @@ class CategoryController
         try {
             $inputs = json_decode($request->getBody()->getContents(), true);
 
-            $category = $this->categoryRepository->read($args);
-
-            if (!$category) {
-                throw new \Exception('Category not found.', 404);
-            }
-
-            if (empty($inputs['name']) || empty($inputs['description'])) {
-                throw new \Exception('Missing required fields.', 400);
-            }
+            $this->categoryRepository->read($args);
 
             $this->categoryRepository->update($inputs, $args);
 
-            $data = $this->categoryRepository->read($args);
+            $output = [
+                'status' => 'successfully updated',
+                'data' => [
+                    'id' => $args['id'],
+                    'name' => $inputs['name'],
+                    'description' => $inputs['description'],
+                ],
+            ];
 
-            return new JsonResponse($data);
+            return new JsonResponse($output);
         } catch (\Exception $e) {
             $statusCode = $e->getCode() ?: 400;
             return new JsonResponse(['error' => $e->getMessage()], $statusCode);
@@ -221,18 +216,13 @@ class CategoryController
      *     )
      * )
      */
-    
+
     public function delete(Request $request, Response $response, mixed $args): JsonResponse
     {
 
         $category = $this->categoryRepository->read($args);
 
-        if (!$category) {
-            return new JsonResponse(['error' => 'Category not found.'], 404);
-        }
-
         $this->categoryRepository->delete($args);
-
 
         $output = [
             "status" => "Category deleted"
@@ -240,5 +230,4 @@ class CategoryController
 
         return new JsonResponse($output);
     }
-   
 }

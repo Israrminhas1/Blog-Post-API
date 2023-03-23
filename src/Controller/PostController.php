@@ -3,16 +3,17 @@
 namespace ProjectApi\Controller;
 
 use DI\Container;
+use DateTimeImmutable;
 use Laminas\Diactoros\Response\JsonResponse;
 use ProjectApi\Controller\FileController;
 use ProjectApi\Entity\Post;
 use ProjectApi\Repository\PostRepository;
-use ProjectApi\Repository\PostsCategoriesRepository;
+use ProjectApi\Repository\CategoryRepository;
+use ProjectApi\Validator\PostValidator;
 use Ramsey\Uuid\Uuid;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
 use Cocur\Slugify\Slugify;
-use PDO;
 use OpenApi\Annotations as OA;
 
 class PostController
@@ -55,47 +56,29 @@ class PostController
      */
 
     private PostRepository $postRepository;
-    private PostsCategoriesRepository $postsCategoriesRepository;
-    private PDO $pdo;
+    private CategoryRepository $categoryRepository;
+
 
     public function __construct(Container $container)
     {
-     
-        $this->postRepository = $container->get('post-repository');
-        $this->postsCategoriesRepository = $container->get('posts_categories-repository');
-        $this->pdo = $container->get('db');
 
+        $this->postRepository = $container->get('post-repository');
+        $this->categoryRepository = $container->get('category-repository');
     }
- 
+
     public function create(Request $request, Response $response, mixed $args): JsonResponse
     {
+        $inputs = json_decode($request->getBody()->getContents(), true);
+
+        PostValidator::validate($inputs);
         try {
-            $this->pdo->beginTransaction();
-
-            $inputs = json_decode($request->getBody()->getContents(), true);
-
-            $posts = $this->postRepository->listAllPosts();
-
-            foreach ($posts as $post) {
-                if ($post['title'] === $inputs['title']) {
-                    throw new \Exception('Post with that title already exists.', 400);
-                }
-            }
-
-            if (
-                empty($inputs['title']) || empty($inputs['content']) || empty($inputs['thumbnail']) ||
-                empty($inputs['author']) || empty($inputs['categories'])
-            ) {
-                throw new \Exception('Missing required fields.');
-            }
-
             $slugify = new Slugify();
             $slug = $slugify->slugify($inputs['title']);
 
-            $postedAt = date('Y-m-d H:i:s');
+
 
             $thumbnail = new FileController($inputs['thumbnail']);
-            $filePath = 'http://localhost:8888/uploads/' . $thumbnail->handle();
+            $filePath = $_ENV['APP_URL'] . '/' . 'uploads/' . $thumbnail->handle();
 
             $post = new Post(
                 Uuid::uuid4(),
@@ -104,35 +87,19 @@ class PostController
                 $inputs['content'],
                 $filePath,
                 $inputs['author'],
-                $postedAt,
-                $inputs['categories']
+                new DateTimeImmutable(),
             );
-
+            foreach ($inputs['categories'] as $r) {
+                $category = $this->categoryRepository->getByIdString($r['id']);
+                $post->addCategory($category);
+            }
             $this->postRepository->store($post);
-            $this->postsCategoriesRepository->store($post);
-
-            $this->pdo->commit();
-
-            $output = [
-                'id' => $post->id(),
-                'title' => $post->title(),
-                'slug' => $post->slug(),
-                'content' => $post->content(),
-                'thumbnail' => $post->thumbnail(),
-                'author' => $post->author(),
-                'posted_at' => $post->postedAt(),
-                'categories' => $post->categories()
-            ];
+            $output = ["success"];
 
             return new JsonResponse($output);
         } catch (\Exception $e) {
-            $this->pdo->rollBack();
-            $inputs = json_decode($request->getBody()->getContents(), true);
-
             return new JsonResponse(['error' => $e->getMessage()], 400);
         }
-
-
     }
      /**
      * @OA\Get(
@@ -145,13 +112,21 @@ class PostController
      *     )
      * )
      */
-    public function listAllPosts(Request $request, Response $response, mixed $args): JsonResponse
+    public function list(Request $request, Response $response, mixed $args): JsonResponse
     {
         $allPosts = $this->postRepository->listAllPosts();
 
-        return new JsonResponse($allPosts);
+        return $this->toJson($allPosts);
     }
-    
+
+    private function toJson(array $posts): JsonResponse
+    {
+        $postsCategories = [];
+        foreach ($posts as $post) {
+            $postsCategories[] = $post->toArray();
+        }
+        return new JsonResponse($postsCategories);
+    }
        /**
      * @OA\Get(
      *     path="/v1/posts/{id}",
@@ -180,13 +155,9 @@ class PostController
     {
         $post = $this->postRepository->read($args);
 
-        if (!$post) {
-            return new JsonResponse(['error' => 'Id Mismatched / Post not found.'], 404);
-        }
-
-        return new JsonResponse($post);
+        return new JsonResponse($post->toArray());
     }
-    
+
         /**
      * @OA\Get(
      *     path="/v1/posts/{slug}",
@@ -215,11 +186,7 @@ class PostController
     {
         $post = $this->postRepository->readBySlug($args);
 
-        if (!$post) {
-            return new JsonResponse(['error' => 'Invalid Slug / Post not found.'], 404);
-        }
-
-        return new JsonResponse($post);
+        return new JsonResponse($post->toArray());
     }
      /**
      * @OA\Put(
@@ -265,27 +232,25 @@ class PostController
         try {
             $inputs = json_decode($request->getBody()->getContents(), true);
 
-            $post = $this->postRepository->read($args);
+            $this->postRepository->read($args);
 
-            if (!$post) {
-                throw new \Exception('Id Mismatch / Post not found.', 404);
-            }
 
-            if (empty($inputs['content']) || empty($inputs['thumbnail'])) {
-                throw new \Exception('Missing required fields.', 400);
-            }
-
+            $slugify = new Slugify();
+            $inputs['slug'] = $slugify->slugify($inputs['title']);
             $this->postRepository->update($inputs, $args);
 
-            $data = $this->postRepository->read($args);
+            $output = [
+                'status' => 'success',
+            ];
 
-            return new JsonResponse($data);
+
+            return new JsonResponse($output);
         } catch (\Exception $e) {
             $statusCode = $e->getCode() ?: 400;
             return new JsonResponse(['error' => $e->getMessage()], $statusCode);
         }
     }
-   
+
     /**
      * @OA\Delete(
      *     path="/v1/posts/delete/{id}",
@@ -310,21 +275,18 @@ class PostController
      *     )
      * )
      */
-    
-     public function delete(Request $request, Response $response, mixed $args): JsonResponse
-     {
-         $post = $this->postRepository->read($args);
- 
-         if (!$post) {
-             return new JsonResponse(['error' => 'Invalid Post id or Post not found.'], 404);
-         }
- 
-         $this->postRepository->delete($args);
- 
-         $output = [
-             "status" => "Post deleted succesfully"
-         ];
- 
-         return new JsonResponse($output);
-     }
+
+    public function delete(Request $request, Response $response, mixed $args): JsonResponse
+    {
+
+        $this->postRepository->read($args);
+
+        $this->postRepository->delete($args);
+
+        $output = [
+            "status" => "Post deleted succesfully"
+        ];
+
+        return new JsonResponse($output);
+    }
 }

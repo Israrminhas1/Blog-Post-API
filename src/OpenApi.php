@@ -1,14 +1,17 @@
 <?php
+
 namespace RestApi;
+
 use OpenApi\Annotations as OA;
 
+class OpenApi
+{
+}
 
-class OpenApi {}
-
-class MyController {
-
-  
-    public function getResource() {
+class MyController
+{
+    public function getResource()
+    {
         // ...
     }
 }
