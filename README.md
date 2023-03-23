@@ -5,17 +5,6 @@
 # Module 5 Project - REST API
 This project offers a REST API to handle requests for blog posts.The REST API offered here provides all the essential features needed for a blog post, such as creating, reading, updating, and deleting posts and post categories. The database table structure and API documentation provided make it simple to integrate the API with a front-end web application. The following documentation describes how to get started, how to use the API, and the structure of the database tables. 
 
-## Design Patterns
-
-The PHP design patterns used in this project are:
-
-#### Dependency Injection (DI) pattern:
-This pattern is used extensively throughout the code, where dependencies are injected into classes via constructor injection or setter injection.
-#### Repository pattern:
-This pattern is used to encapsulate the data access layer and provide a way for the application to interact with the database. The CategoryRepositoryFromDoctrine and PostRepositoryFromDoctrine classes implement this pattern.
-#### MVC pattern:
-This pattern  separates an application's logic into three interconnected components: Model, View, and Controller.
-The Model represents the data and business logic, the View is responsible for presenting data to the user, and the Controller handles user input and manages the communication between the Model and the View.
 ## Installation
 This app can run using the typical XAMPP configuration; ensure  you have PHP version 7.3 or higher.
 1. Ensure you have XAMPP and Composer installed.
@@ -111,7 +100,17 @@ Images are saved in Uploads folder in public.
 * post_id (foreign key post identifier)
 * category_id (foreign key category identifier)
 
+## Design Patterns
 
+The PHP design patterns used in this project are:
+
+#### Dependency Injection (DI) pattern:
+This pattern is used extensively throughout the code, where dependencies are injected into classes via constructor injection or setter injection.
+#### Repository pattern:
+This pattern is used to encapsulate the data access layer and provide a way for the application to interact with the database. The CategoryRepositoryFromDoctrine and PostRepositoryFromDoctrine classes implement this pattern.
+#### MVC pattern:
+This pattern  separates an application's logic into three interconnected components: Model, View, and Controller.
+The Model represents the data and business logic, the View is responsible for presenting data to the user, and the Controller handles user input and manages the communication between the Model and the View.
 
 
 
