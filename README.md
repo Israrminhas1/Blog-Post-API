@@ -19,16 +19,21 @@ The Model represents the data and business logic, the View is responsible for pr
 ## Installation
 This app can run using the typical XAMPP configuration; ensure  you have PHP version 7.3 or higher.
 1. Ensure you have XAMPP and Composer installed.
-2. Create the database `blog`.
-3. Install the PHP dependencies.  
+2. Configure the environment: 
+   ````
+   cp .env.example .env
+   ````
+3. Add your configuration to the .env file
+4. Create the database `blog`.
+5. Install the PHP dependencies.  
    ````
    composer install
    ````
-4. Create the tables. 
+6. Create the tables. 
    ```
    php vendor/bin/doctrine orm:schema-tool:create 
    ````
-5. Run the local web server.
+7. Run the local web server.
    ```
    php -S localhost:8889 -t public/
 
