@@ -16,7 +16,7 @@ class PostTest extends TestCase
         $slug = 'Post slug';
         $content = 'Post content';
         $thumbnail = 'image.jpeg';
-        $author = 'Krivan Raul';
+        $author = 'Israr Minhas';
         $posted_at = new DateTimeImmutable();
 
         $posts = new Post(
