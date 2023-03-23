@@ -77,7 +77,7 @@ Images are saved in Uploads folder in public.
 
 #### API Documentation
  * [GET] /api-docs
-###### You can access the API documentation for Swagger PHP library at http://localhost:8999/api-docs. The documentation contains information about the endpoints that are available, the parameters you can use, and the responses you can expect.
+###### You can access the API documentation for Swagger PHP library at /api-docs. The documentation contains information about the endpoints that are available, the parameters you can use, and the responses you can expect.
 
 ## Database Tables:
 
