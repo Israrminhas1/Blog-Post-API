@@ -24,6 +24,7 @@ class Category
         #[ORM\Column(name: 'description', type: 'string', nullable: true)]
         private string $description,
     ) {
+        $this->post = new ArrayCollection();
     }
 
     public function id(): UuidInterface
