@@ -2,7 +2,7 @@
   <img align="center" height="200" src="public/elephpant.png">
 </p>
 
-# Module 5 Project - REST API
+# BLOG - REST API
 This project offers a REST API to handle requests for blog posts.The REST API offered here provides all the essential features needed for a blog post, such as creating, reading, updating, and deleting posts and post categories. The database table structure and API documentation provided make it simple to integrate the API with a front-end web application. The following documentation describes how to get started, how to use the API, and the structure of the database tables. 
 
 ## Installation
